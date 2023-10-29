@@ -1,0 +1,209 @@
+# Console project in dotnet with entity framework
+
+## 1. Create a Console Project
+
+- Make sure you have the .NET SDK installed on your system.
+  - `https://dotnet.microsoft.com/en-us/download/dotnet/7.0`
+  - `https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/sdk-7.0.403-windows-x64-installer`
+- Open your terminal or command prompt.
+- Navigate to the directory where you want to create your project.
+- Run the following command to create a new console application
+
+```bash
+dotnet new console -n EFCoreConsoleApp --use-program-main
+```
+
+- Change the working directory to your project folder
+
+```bash
+cd EFCoreConsoleApp
+```
+
+## 2. Add NuGet Packages
+
+To add Entity Framework Core and Entity Framework Core Tools packages, run the following commands:
+
+```bash
+dotnet add package Microsoft.EntityFrameworkCore
+dotnet add package Microsoft.EntityFrameworkCore.Design
+dotnet add package Microsoft.EntityFrameworkCore.SqlServer
+dotnet add package Microsoft.EntityFrameworkCore.Tools
+dotnet add package Microsoft.VisualStudio.Web.CodeGeneration.Design
+dotnet add package AutoMapper.Extensions.Microsoft.DependencyInjection
+```
+
+## 3. Database First
+
+### Scaffolding
+
+- Make sure you have installed `dotnet-ef` and `dotnet-aspnet-codegenerator`
+
+```bash
+dotnet tool install --global dotnet-ef
+dotnet tool install -g dotnet-aspnet-codegenerator
+```
+
+- Run the following command
+
+```bash
+dotnet ef dbcontext scaffold "Server=(localdb)\MSSQLLocalDB;Database=roi;Trusted_Connection=True;" Microsoft.EntityFrameworkCore.SqlServer -o Models
+```
+
+## 4. Code First
+
+### Create a Model Class and DbContext
+
+- Make sure you have Visual Studio Code installed
+  - `https://code.visualstudio.com/Download`
+- Make sure you have the following extension:
+  - `C# Dev Kit for Visual Studio Code`
+  - `SQL Server (mssql)`
+- Open vscode, run the following commands:
+
+```bash
+code .
+```
+
+- Create a directory called `Models`
+- Create a class `Person.cs` in `Models` directory
+
+```csharp
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+public class Person
+{
+    [Key]
+    public int Id { get; set; }
+    public string Name { get; set; }
+    public string Phone { get; set; }
+    [ForeignKey("Department")]
+    public int DepartmentId { get; set; }
+    public string Street { get; set; }
+    public string City { get; set; }
+    public string State { get; set; }
+    public string ZIP { get; set; }
+    public string Country { get; set; }
+    public virtual Department? Department { get; set; }
+}
+```
+
+- Create a model class `Department.cs` for the Department data in `Models` directory:
+
+```csharp
+using System.ComponentModel.DataAnnotations;
+
+public class Department
+{
+    [Key]
+    public int Id { get; set; }
+    public string Name { get; set; }
+    public virtual ICollection<Person> People { get; set; } = new List<Person>();
+}
+```
+
+- Create a DbContext class, `RoiContext.cs`, to manage interactions with the database:
+
+```csharp
+using Microsoft.EntityFrameworkCore;
+
+public class RoiContext : DbContext
+{
+    public DbSet<Person> People { get; set; }
+    public DbSet<Department> Departments { get; set; }
+
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        optionsBuilder.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=roi;Trusted_Connection=True;");
+    }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        // Configure the foreign key relationship
+        modelBuilder.Entity<Person>()
+            .HasOne(p => p.Department)
+            .WithMany(d => d.People)
+            .HasForeignKey(p => p.DepartmentId);
+
+        modelBuilder.Entity<Department>(b =>
+        {
+            b.ToTable("Department");
+            b.Property(x => x.Id).ValueGeneratedOnAdd().UseIdentityColumn(0, 1);
+        });
+    }
+}
+```
+
+## Create Migrations and Apply
+
+In your terminal, run the following commands to create an initial migration and apply it to create the database:
+
+```bash
+dotnet ef migrations add InitialCreate
+dotnet ef database update
+```
+
+## Seed data
+
+- Make sure you have the following extension:
+  - `SQL Server (mssql)`
+- Open the mssql extension
+- Crete a confection to the database
+  - Use `(localdb)\MSSQLLocalDB`
+  - Use integrated authentication
+  - All other optional entry empty
+
+```sql
+-- Enable IDENTITY_INSERT for the People table
+SET IDENTITY_INSERT Department ON;
+
+-- Insert data into the Departments table
+INSERT INTO Department (Id, Name)
+VALUES
+    (0, 'General'),
+    (1, 'Information Communications Technology'),
+    (2, 'Finance'),
+    (3, 'Marketing'),
+    (4, 'Human Resources');
+
+-- Disable IDENTITY_INSERT for the People table
+SET IDENTITY_INSERT Department OFF;
+
+-- Enable IDENTITY_INSERT for the People table
+SET IDENTITY_INSERT People ON;
+
+-- Insert data into the People table
+INSERT INTO People (Id, Name, Phone, DepartmentId, Street, City, State, ZIP, Country)
+VALUES
+    (1, 'John Smith', '02 9988 2211', 1, '1 Code Lane', 'Javaville', 'NSW', '0100', 'Australia'),
+    (2, 'Sue White', '03 8899 2255', 2, '16 Bit way', 'Byte Cove', 'QLD', '1101', 'Australia'),
+    (3, 'Bob O'' Bits', '05 7788 2255', 3, '8 Silicon Road', 'Cloud Hills', 'VIC', '1001', 'Australia'),
+    (4, 'Mary Blue', '06 4455 9988', 2, '4 Processor Boulevard', 'Appletson', 'NT', '1010', 'Australia'),
+    (5, 'Mick Green', '02 9988 1122', 3, '700 Bandwidth Street', 'Bufferland', 'NSW', '0110', 'Australia');
+
+-- Disable IDENTITY_INSERT for the People table
+SET IDENTITY_INSERT People OFF;
+```
+
+## 5. Use the DbContext in Your Program
+
+```csharp
+using System;
+using System.Linq;
+
+class Program
+{
+    static void Main(string[] args)
+    {
+        using (var context = new RoiContext())
+        {
+            // Sample query to retrieve and display data
+            var people = context.People.ToList();
+            foreach (var person in people)
+            {
+                Console.WriteLine($"Id: {person.Id}, Name: {person.Name}, Phone: {person.Phone}, Country: {person.AddressCountry}");
+            }
+        }
+    }
+}
+```

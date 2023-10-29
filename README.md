@@ -1,1 +1,16 @@
-# Guide-to-Building-RESTful-APIs-in-ASP.NET-Core
+# Guide to Building RESTful APIs in ASP.NET-Core
+
+- [Data](/Data/Data.md)
+  - [Databases](/Data/database.md)
+  - [Entity Framework](./Data/Entity%20Framework.md)
+  - [Database Creation Approach](./Data/Database%20Creation%20Approach.md)
+  - [ORM (Object-Relational Mapping)](./Data/ORM.md)
+  - [Sql Server](/Data/sqlserver.md)
+- [Web Api](./Web%20Api/README.md)
+  - [What is a web API](./Web%20Api/What%20is%20a%20web%20API.md)
+  - [RESTful API Fundamentals](./Web%20Api/RESTful%20API%20Fundamentals.md)
+  - [HTTP (Hypertext Transfer Protocol)](<./Web%20Api/HTTP%20(Hypertext%20Transfer%20Protocol).md>)
+- [ASP.NET Core Web API](/ASP.NET%20Core%20Web%20API/README.md)
+  - [NuGet & Package manager](/ASP.NET%20Core%20Web%20API/NuGet.md)
+  - [Console project in dotnet with entity framework](/ASP.NET%20Core%20Web%20API/Console%20project%20in%20dotnet%20with%20entity%20framework.md)
+  - [ASP.NET Core Web API project](/ASP.NET%20Core%20Web%20API/ASP.NET%20Core%20Web%20API%20project.md)
