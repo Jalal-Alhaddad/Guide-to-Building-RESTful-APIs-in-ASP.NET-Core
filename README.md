@@ -6,6 +6,7 @@
   - [Database Creation Approach](./Data/Database%20Creation%20Approach.md)
   - [ORM (Object-Relational Mapping)](./Data/ORM.md)
   - [Sql Server](/Data/sqlserver.md)
+  - [Data Transfer Object](./Data/Data%20Transfer%20Object.md)
 - [Web Api](./Web%20Api/README.md)
   - [What is a web API](./Web%20Api/What%20is%20a%20web%20API.md)
   - [RESTful API Fundamentals](./Web%20Api/RESTful%20API%20Fundamentals.md)
