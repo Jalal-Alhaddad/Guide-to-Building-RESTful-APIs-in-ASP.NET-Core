@@ -26,7 +26,7 @@ A Web API (Application Programming Interface) is a set of rules and protocols th
 ## 2. Why Web APIs are Important
 
 - Enabling data exchange: They facilitate the exchange of data between different systems, devices, and platforms.
-- Integrating services: Web APIs allow to integrate your application with external services, [external services](1.%20Web%20Api/1.%20What%20is%20a%20web%20API.md/External%20Services)
+- Integrating services: Web APIs allow to integrate your application with external services, [external services](1.%20Web%20Api/1.%20What%20is%20a%20web%20API.md/#external-services)
 
 ## 3. ASP.NET Core Benefits
 
