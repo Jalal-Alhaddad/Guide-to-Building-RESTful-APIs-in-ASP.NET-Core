@@ -1,21 +1,22 @@
 # Guide to Building RESTful APIs in ASP.NET-Core
 
-- [Data](/Data/Data.md)
-  - [Databases](/Data/database.md)
-  - [Entity Framework](./Data/Entity%20Framework.md)
-  - [Database Creation Approach](./Data/Database%20Creation%20Approach.md)
-  - [ORM (Object-Relational Mapping)](./Data/ORM.md)
-  - [Sql Server](/Data/sqlserver.md)
-  - [Data Transfer Object](./Data/Data%20Transfer%20Object.md)
-  - [JSON serialization](./Data/JSON%20serialization.md)
-- [Web Api](./Web%20Api/README.md)
-  - [What is a web API](./Web%20Api/What%20is%20a%20web%20API.md)
-  - [RESTful API Fundamentals](./Web%20Api/RESTful%20API%20Fundamentals.md)
-  - [HTTP (Hypertext Transfer Protocol)](<./Web%20Api/HTTP%20(Hypertext%20Transfer%20Protocol).md>)
-- [ASP.NET Core Web API](/ASP.NET%20Core%20Web%20API/README.md)
-  - [NuGet & Package manager](/ASP.NET%20Core%20Web%20API/NuGet.md)
-  - [Console project in dotnet with entity framework](/ASP.NET%20Core%20Web%20API/Console%20project%20in%20dotnet%20with%20entity%20framework.md)
-  - [ASP.NET Core Web API project](/ASP.NET%20Core%20Web%20API/ASP.NET%20Core%20Web%20API%20project.md)
+- [Web Api](./1.%20Web%20Api/README.md)
+  1. [What is a web API](/1.%20Web%20Api/1.%20What%20is%20a%20web%20API.md)
+  2. [RESTful API Fundamentals](/1.%20Web%20Api/2.%20RESTful%20API%20Fundamentals.md)
+  3. [HTTP (Hypertext Transfer Protocol)](<./1.%20Web%20Api/3.%20HTTP%20(Hypertext%20Transfer%20Protocol).md>)
+- [ASP.NET Core Web API](./2.%20ASP.NET%20Core%20Web%20API/README.md)
+  1. [Anatomy of the Project](./2.%20ASP.NET%20Core%20Web%20API/1.%20Anatomy%20of%20the%20Project.md)
+  2. [NuGet & Package manager](./2.%20ASP.NET%20Core%20Web%20API/2.%20NuGet.md)
+  3. [Console project in dotnet with entity framework](./2.%20ASP.NET%20Core%20Web%20API/3.%20Console%20project%20in%20dotnet%20with%20entity%20framework.md)
+  4. [ASP.NET Core Web API project](/2.%20ASP.NET%20Core%20Web%20API/4.%20ASP.NET%20Core%20Web%20API%20project.md)
+- [Data](./3.%20Data/1.%20Data.md)
+  1. [Databases](./3.%20Data/2.%20Database.md)
+  2. [ORM (Object-Relational Mapping)](./3.%20Data/3.%20ORM.md)
+  3. [Entity Framework](./3.%20Data/4.%20Entity%20Framework.md)
+  4. [Database Creation Approach](./3.%20Data/5.%20Database%20Creation%20Approach.md)
+  5. [Data Transfer Object](./3.%20Data/6.%20Data%20Transfer%20Object.md)
+  6. [JSON serialization](./3.%20Data/7.%20JSON%20serialization.md)
+  7. [Sql Server](./3.%20Data/8.%20Ssqlserver.md)
 
 ## 1. What is a Web API?
 
@@ -44,6 +45,10 @@ A Web API (Application Programming Interface) is a set of rules and protocols th
   - Microsoft Visual Studio Code (cross-platform)
   - Microsoft .NET Core SDK 7
   - Microsoft SQL Server Express LocalDB
+- Microsoft Visual Studio Code Extensions
+  - **C# Dev Kit**
+  - **SQL Server (mssql)**
+  - **REST Client**
 
 ## 5. Installation and Setup
 
