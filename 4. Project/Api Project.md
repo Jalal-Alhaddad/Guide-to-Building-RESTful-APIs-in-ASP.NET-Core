@@ -128,7 +128,7 @@ dotnet tool install -g dotnet-aspnet-codegenerator
 dotnet ef dbcontext scaffold "Server=(localdb)\MSSQLLocalDB;Database=roi_database;Trusted_Connection=True;" Microsoft.EntityFrameworkCore.SqlServer -o Models
 ```
 
-3. Remove database connection from `RoiDatabaseContext` class in `OnConfiguring` method
+3. Remove database connection comment from `RoiDatabaseContext` class in `OnConfiguring` method
 
 ```csharp
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -205,7 +205,9 @@ app.UseCors();
 
 ```bash
 dotnet aspnet-codegenerator controller -name PeopleController -m test.Models.Person -dc test.Models.RoiDatabaseContext --relativeFolderPath Controllers --useDefaultLayout --referenceScriptLibraries -api
+```
 
+```bash
 dotnet aspnet-codegenerator controller -name DepartmentsController -m test.Models.Department -dc test.Models.RoiDatabaseContext --relativeFolderPath Controllers --useDefaultLayout --referenceScriptLibraries -api
 ```
 

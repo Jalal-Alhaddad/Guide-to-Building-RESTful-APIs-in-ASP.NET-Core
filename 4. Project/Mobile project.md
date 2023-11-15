@@ -67,7 +67,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 const Stack = createNativeStackNavigator();
 ```
 
-- Update `./navigation/PeopleNavigator.js`
+- Update `./navigation/RootNavigator.js`
 
 ```javascript
 // import { createStackNavigator } from '@react-navigation/stack';
