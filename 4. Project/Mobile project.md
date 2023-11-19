@@ -1,10 +1,10 @@
 # Mobile project
 
-## I. Git repo
+## 1. Git repo
 
 Use instruction in [Api project](../4.%20Project/Api%20Project.md#git-repo) to create a new repo for the mobile app.
 
-## Download and update the template
+## 2. Download and update the template
 
 - Form moodle, download `RoiFrontend Expo app` in your directory and extract it.
 - Copy the template contents to your new repo created for mobile app.
@@ -56,6 +56,17 @@ Module not found: Can't resolve '@react-navigation/stack'
 web compiled with 2 errors
 ```
 
+- Update `./navigation/RootNavigator.js`
+- Line 1 and 13
+
+```javascript
+// import { createStackNavigator } from '@react-navigation/stack';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+
+// const Stack = createStackNavigator();
+const Stack = createNativeStackNavigator();
+```
+
 - Update `./navigation/PeopleNavigator.js`
 - Line 1 and 10
 
@@ -67,25 +78,18 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 const Stack = createNativeStackNavigator();
 ```
 
-- Update `./navigation/RootNavigator.js`
-
-```javascript
-// import { createStackNavigator } from '@react-navigation/stack';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-
-// const Stack = createStackNavigator();
-const Stack = createNativeStackNavigator();
-```
-
 - Now the template is updated to the latest version. And working fine
 
-## Connect with the Api
+## 3. Connect with the Api
 
-- Start your Api project, and check the url
+- Start your **Api project**, and record the url
+
+![](../Images/JH_2023-11-19-22-03-24.png)
+
+- Download files in `utils` folder in this repo
+- Copy downloaded files into `utils` folder in your project (**replace**)
 - Comment `const apiUrl = "https://localhost:7215/api/v1";` in `Api.js`
-- Comment function `function RoiGetPeople()`  in `Api.js`
-- Add the file `RoiApi.js` to the project
-- Update url to match your server in `RoiApi.js`, use http instead of https
+- Update `apiUrl` to match your server in `RoiApi.js`, use http instead of https, note the port no is different
 
 ```javascript
 const apiUrl = 'http://localhost:5219/api';
@@ -94,156 +98,76 @@ const apiUrl = 'http://localhost:5219/api';
 - In `ViewPeopleScreen` update
 
 ```javascript
+// import { RoiGetPeople } from '../utils/Api';
 import { RoiGetPeople } from '../utils/RoiApi';
 ```
 
+- Start your app using `npm start` or `npx expo start`
 - You should see list oe people in the view people screen
 
-## Create Add Screen
+## 4. Update files and styles
 
-- Create new file `AddPersonScreen.js` in screens dir
-- Add the following to `BottomTabNavigator`
+- Install the following package
 
-```javascript
-import AddPersonScreen from '../screens/AddPersonScreen';
+```bash
+npx expo install react-native-flash-message
 ```
 
-- Add the following between People and help `BottomTab.Screen`
+![1](../Images/JH_2023-11-19-22-15-54.png)
 
-```jsx
-      <BottomTab.Screen
-        name="AddPerson"
-        component={AddPersonScreen}
-        options={{
-          title: 'Add Person',
-          tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-person-add" />,
-        }}
-      />
-```
+- Copy files form folders `components`, `constants`, `styles`, and `App.js` and `jsconfig.json`
+- Run your app to see different coloring style
 
-```javascript
-  const [id, setId] = React.useState(-1);
-  const [name, setName] = React.useState('');
-  const [phone, setPhone] = React.useState('');
-  const [departmentId, setDepartmentId] = React.useState(0);
-  const [street, setStreet] = React.useState('');
-  const [city, setCity] = React.useState('');
-  const [state, setState] = React.useState('');
-  const [zip, setZip] = React.useState('');
-  const [country, setCountry] = React.useState('');
-```
+## 5. Update Home Screen
+
+- Add Buttons
+- Add Logo Image
+- Add App Name
+- Add click functionality to logo image
+
+## 6. Update Help Screen
 
 ```javascript
-  function refreshDepartments() {
-    // Get data from the API
-    RoiGetDepartments()
-      // Success
-      .then((data) => {
-        // Store results in state variable
-        setDepartments(data);
-      })
-      // Error
-      .catch((error) => {
-        PopupOk('API Error', 'Could not get departments from the server');
-      });
+  // State management
+
+  const [fontSizeModifier, setFontSizeModifier] = React.useState(Settings.fontSizeModifier);
+
+  // changeFontSize(-0.1)
+  function changeFontSize(sizeModifier) {
+
+    // TODO: validate the font size (e.g. not negative)
+
+    // Update the global settings value
+    Settings.fontSizeModifier += sizeModifier;
+
+    // Update the state variable to re-render the screen (update the UI)
+    setFontSizeModifier(Settings.fontSizeModifier);
   }
 ```
 
-```javascript
-function AddPerson() {
-    // Update the person using the API
-    RoiAddPerson(name, phone, departmentId, street, city, state, zip, country)
-      .then((data) => {
-        // Show confirmation that the person has been added
-        PopupOk('Person added', `${name} has been added`);
+## 7. ViewPeople Screen
 
-        // Go back to the person list (ViewPeople)
-        // props.navigation.navigate("ViewPeople");
-        showViewPeople();
-      })
-      .catch((error) => {
-        // Display error
-        PopupOk('API Error', error);
-      });
+```javascript
+  function showAddPerson() {
+    // Navigate to AddPerson and replace the current screen
+    props.navigation.replace('Root', { screen: 'AddPerson' });
   }
-```
 
-## Create Edit Screen
-
-```javascript
-function refreshPerson() {
-    // Get person ID passed to this screen (via props)
-    const id = props.route.params.id;
-
-    // Get data from the API
-    RoiGetPerson(id)
-      // Success
-      .then((p) => {
-        // Store results in state variable (if data returned)
-        if (p) {
-          setId(p.id);
-          setName(p.name);
-          setNameOriginal(p.name);
-          setPhone(p.phone);
-          setDepartmentId(p.departmentId ?? 0);
-          setStreet(p.street);
-          setCity(p.city);
-          setState(p.state);
-          setZip(p.zip);
-          setCountry(p.country);
-        }
-      })
-      // Error
-      .catch((error) => {
-        // Display error
-        PopupOk('API Error', 'Could not get person from the server');
-        // OPTIONAL: navigate back to ViewPeople screen
-        props.navigation.navigate('ViewPeople');
-      });
+  function showViewPerson(person) {
+    // Navigate to ViewPerson and pass through the person's ID as a param
+    props.navigation.navigate('ViewPerson', { id: person.id });
   }
-```
 
-```javascript
-function editPerson() {
-    // Update the person using the API
-    RoiUpdatePerson(id, name, phone, departmentId, street, city, state, zip, country)
-      .then((data) => {
-        // Show confirmation that the person has been edit
-        PopupOk('Person saved', `${nameOriginal} has been  saved`);
-
-        // Go back to the person list (ViewPeople)
-        // props.navigation.navigate("ViewPeople");
-        props.navigation.replace('Root', { screen: 'People' });
-      })
-      .catch((error) => {
-        // Display error
-        PopupOk('API Error', error);
-      });
+  function showEditPerson(person) {
+    // Navigate to EditPerson and pass through the person's ID as a param
+    props.navigation.navigate('EditPerson', { id: person.id });
   }
-```
 
-## Create View Screen
-
-```javascript
-function refreshPersonList() {
-    console.log('refresh person list');
-
-    // Get data from the API
-    RoiGetPeople()
-      // Success
-      .then((data) => {
-        // Store results in state variable
-        setPeople(data);
-      })
-      // Error
-      .catch((error) => {
-        PopupOk('API Error', 'Could not get people from the server');
-      });
-  }
-```
-
-```javascript
-function deletePerson(person) {
+  /**
+   * Delete a person from the database
+   * @param {Person} person The person to delete.
+   */
+  function deletePerson(person) {
     // Check if person should be deleted (confirm with user)
     PopupOkCancel(
       // Title and message
@@ -272,138 +196,47 @@ function deletePerson(person) {
       }
     );
   }
-```
 
-```javascript
-function displayPeople() {
-    // Loop through each item and turn into appropriate output and then return the result
-    return people.map((p) => {
-      // Create an output view for each item
-      return (
-        <View key={p.id} style={Styles.dataContainerHorizontal}>
-          <View style={Styles.personListItemDetails}>
-            <TextParagraph style={Styles.personListItemName}>{p.name}</TextParagraph>
-            <TextParagraph style={Styles.personListItemText}>{p.department?.name ?? '---'}</TextParagraph>
-            <TextParagraph style={Styles.personListItemText}>{p.phone}</TextParagraph>
-          </View>
-          <ButtonContainer direction="column">
-            {/* <View style={Styles.personListItemButtons}> */}
-            <MyButton
-              text="info"
-              type="major" // default*|major|minor
-              size="small" // small|medium*|large
-              onPress={() => {
-                showViewPerson(p);
-              }}
-              buttonStyle={Styles.personListItemButton}
-              textStyle={Styles.personListItemButtonText}
-            />
-            <MyButton
-              text="Edit"
-              type="default" // default*|major|minor
-              size="small" // small|medium*|large
-              onPress={() => {
-                showEditPerson(p);
-              }}
-              buttonStyle={Styles.personListItemButton}
-              textStyle={Styles.personListItemButtonText}
-            />
-            <MyButton
-              text="Delete"
-              type="minor" // default*|major|minor
-              size="small" // small|medium*|large
-              onPress={() => deletePerson(p)}
-              buttonStyle={Styles.personListItemButton}
-              textStyle={Styles.personListItemButtonText}
-            />
-            {/* </View> */}
-          </ButtonContainer>
-        </View>
-      );
+  // Display flash message banner if offline
+  function displayConnectionMessage() {
+    console.log('displayConnectionMessage');
+    // Get network connection status
+    NetInfo.fetch().then((status) => {
+      // Check if not connected to the Internet
+      if (!status.isConnected) {
+        // Display the flash message
+        infoMessage('No internet connection', 'You will only see cached data until you \nhave an active internet connection again');
+      }
     });
   }
 ```
 
-## Create View Record Screen
+## 8. AddPersonScreen
+
+- Download `AddPersonScreen.js` from screens folder into screens folder
+- Add the following to `BottomTabNavigator.js` from navigation folder
 
 ```javascript
-const personTemplate = {
-    id: 0,
-    name: '',
-    phone: '',
-    departmentId: null,
-    street: '',
-    city: '',
-    state: '',
-    zip: '',
-    country: '',
-    department: null,
-  };
+import AddPersonScreen from '../screens/AddPersonScreen';
 ```
 
-```javascript
-function refreshPerson() {
-    // Get person ID passed to this screen (via props)
-    const id = props.route.params.id;
+- Add the following between People and help `BottomTab.Screen`
 
-    // Get data from the API
-    RoiGetPerson(id)
-      // Success
-      .then((data) => {
-        // Store results in state variable (if data returned)
-        if (data) setPerson(data);
-      })
-      // Error
-      .catch((error) => {
-        // Display error
-        PopupOk('API Error', 'Could not get person from the server');
-        // OPTIONAL: navigate back to ViewPeople screen
-        props.navigation.navigate('ViewPeople');
-      });
-  }
-
+```jsx
+      <BottomTab.Screen
+        name="AddPerson"
+        component={AddPersonScreen}
+        options={{
+          title: 'Add Person',
+          tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-person-add" />,
+        }}
+      />
 ```
 
-```javascript
-/**
-   * Delete a person from the database
-   */
-  function deletePerson() {
+## 9. EditPersonScreen
 
-    // Check if person should be deleted (confirm with user)
-    PopupOkCancel(
+- Download `EditPersonScreen.js` from screens folder into screens folder
 
-      // Title and message
-      'Delete person?',
-      `Are you sure you want to delete ${person.name}`,
+## 10. ViewPersonScreen
 
-      // 0K - delete the person
-      () => {
-
-        // Delete the person using the API
-        RoiDeletePerson(person.id)
-          .then((data) => {
-            // Show confirmation that the person has been deleted
-            PopupOk('Person deleted', `${person.name} has been  deleted`);
-
-            // Go back to the person list (ViewPeople)
-            // props.navigation.navigate("ViewPeople");
-            props.navigation.replace("Root", {screen: "People"});
-          })
-          .catch((error) => {
-            // Display error
-            PopupOk('API Error', 'Could not delete person');
-          });
-        // console.log('Ok.. deleting person');
-      },
-      // Cancel do nothing
-      () => {
-        console.log('Cancel - no delete for you!');
-      }
-    );
-  }
-```
-
-```javascript
-
-```
+- Download `ViewPersonScreen.js` from screens folder into screens folder

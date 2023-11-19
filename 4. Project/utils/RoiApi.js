@@ -1,36 +1,58 @@
-
-import { getRequest, deleteRequest, postRequest, putRequest } from './Api';
+import { getRequest, deleteRequest, postRequest, putRequest, getRequestWithCaching } from './Api';
 
 // Root URL for the API backend
 const apiUrl = 'http://localhost:5219/api';
+const useCache = true;
 
 // Get all departments
 export function RoiGetDepartments() {
   // Call API endpoint: GET /Departments
   console.log(`${apiUrl}/Departments`);
-  return getRequest(`${apiUrl}/Departments`).then((response) => {
-    // If request/response is successful, return JSON data
-    return response;
-  });
+  if (useCache) {
+    return getRequestWithCaching(`${apiUrl}/Departments`).then((response) => {
+      // If request/response is successful, return JSON data
+      return response;
+    });
+  } else {
+    return getRequest(`${apiUrl}/Departments`).then((response) => {
+      // If request/response is successful, return JSON data
+      return response;
+    });
+  }
 }
 
 // Get all people
 export function RoiGetPeople() {
   // Call API endpoint: GET /People
-  return getRequest(`${apiUrl}/People`).then((response) => {
-    // If request/response is successful, return JSON data
-    return response;
-  });
+  console.log(`${apiUrl}/People`);
+  if (useCache) {
+    return getRequestWithCaching(`${apiUrl}/People`).then((response) => {
+      // If request/response is successful, return JSON data
+      return response;
+    });
+  } else {
+    return getRequest(`${apiUrl}/People`).then((response) => {
+      // If request/response is successful, return JSON data
+      return response;
+    });
+  }
 }
 
 // Get person
 export function RoiGetPerson(id) {
   // Call API endpoint: GET /Person/{id}
   console.log(`${apiUrl}/People/${id}`);
-  return getRequest(`${apiUrl}/People/${id}`).then((response) => {
-    // If request/response is successful, return JSON data
-    return response;
-  });
+  if (useCache) {
+    return getRequestWithCaching(`${apiUrl}/People/${id}`).then((response) => {
+      // If request/response is successful, return JSON data
+      return response;
+    });
+  } else {
+    return getRequest(`${apiUrl}/People/${id}`).then((response) => {
+      // If request/response is successful, return JSON data
+      return response;
+    });
+  }
 }
 
 // Delete person
